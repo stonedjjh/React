@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Carpetas temporales de Google Drive (descargas y subidas)
+.tmp.drivedownload/
+.tmp.driveupload/
