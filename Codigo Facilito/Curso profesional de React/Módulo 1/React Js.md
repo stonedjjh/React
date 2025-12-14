@@ -1,10 +1,5 @@
 # React Js
 
-á 160
-é 130
-í
-ó 162
-
 ## Características
 
 - Una librería para el desarrollo de frontend moderno.
