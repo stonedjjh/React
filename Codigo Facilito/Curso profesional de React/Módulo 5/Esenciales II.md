@@ -109,8 +109,8 @@ En este ejemplo, el evento `onClick` está asociado a la función `manejarClick`
 
 > [!IMPORTANT]
 > Se debe pasar una funcion `{manejarClick}` no llamar una funcion `{manejarClick()}`
-> con una aleta seria `{() =>alert()}` no `{alert()}`
-> Pasar código en línea así no lo ejecutara al hacer click; lo ejecutará cada vez que el componente se renderice.
+ con una aleta seria `{() =>alert()}` no `{alert()}`
+ Pasar código en línea así no lo ejecutara al hacer click; lo ejecutará cada vez que el componente se renderice.
 
 > [!TIP]
 > Si necesitas pasar argumentos a la función del manejador de eventos, puedes usar una
