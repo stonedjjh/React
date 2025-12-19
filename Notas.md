@@ -186,3 +186,21 @@ del ciclo de vida del componente.
 A diferencia de las variables de estado (useState), los cambios en el objeto ref no provocan una nueva
 renderización del componente. useRef es comúnmente utilizado para acceder y manipular el DOM directamente, o
 para almacenar valores que no provocan una renderización cuando cambian.
+
+### forwardRef
+
+forwardRef es una función en React que te permite pasar un ref a un componente hijo directamente al componente
+hijo, sin tener que pasar por el componente intermedio.
+
+En situaciones normales, cuando tienes un componente intermedio que envuelve otro componente y quieres pasar
+un ref al componente interno, puedes encontrarte con problemas. forwardRef soluciona este problema
+permitiéndote pasar el ref directamente al componente hijo.
+
+forwardRef es una función en React que te permite pasar un ref a un componente hijo directamente al componente hijo, sin tener que pasar por el componente intermedio.
+
+### useImperativeHandle
+
+useImperativeHandle es un hook de React que te permite personalizar los valores que son expuestos cuando un
+componente padre accede al ref de un componente hijo.
+
+Este hook es útil cuando necesitas exponer métodos o propiedades específicas de un componente hijo al componente padre, pero deseas ocultar otras partes de su interfaz pública.
