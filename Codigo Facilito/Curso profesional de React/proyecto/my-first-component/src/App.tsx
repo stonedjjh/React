@@ -4,7 +4,35 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
+interface Person {
+  id: number;
+  name: string;
+  age: number;
+}
+
 const arrayOfNumbers: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+const arrayOfPeople: Person[] = [
+  {
+    id: 1,
+    name: "Leanne Graham",
+    age: 20,
+  },
+  {
+    id: 2,
+    name: "Joseph Trump",
+    age: 24,
+  },
+  {
+    id: 3,
+    name: "Miguel Salas",
+    age: 21,
+  },
+  {
+    id: 4,
+    name: "Andres Smith",
+    age: 30,
+  },
+];
 
 function App() {
   const [count, setCount] = useState(0);
@@ -12,8 +40,14 @@ function App() {
 
   //un error común en no agregar la propiedad key a las listas
   //por lo cual se colocara una key unica
-  const items: React.JSX.Element[] = arrayOfNumbers.map((item) => (
+  const numberItems: React.JSX.Element[] = arrayOfNumbers.map((item) => (
     <li key={`array-number-item-${item}`}>{item}</li>
+  ));
+
+  const peopleItems: React.JSX.Element[] = arrayOfPeople.map((person) => (
+    <li
+      key={`array-person-item-${person.id}`}
+    >{`${person.name}: ${person.age}`}</li>
   ));
 
   return (
@@ -43,7 +77,8 @@ function App() {
       </p>
 
       {/* Renderizado de una lista no ordenada */}
-      <ul>{items}</ul>
+      <ul>{numberItems}</ul>
+      <ul>{peopleItems}</ul>
     </>
   );
 }
