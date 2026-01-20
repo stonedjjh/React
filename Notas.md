@@ -153,7 +153,7 @@ El **React Fragment** (o simplemente **Fragment**) es una característica de Rea
 
 ---
 
-### ✅ Propósito
+#### Propósito
 
 El principal propósito del Fragment es actuar como un elemento contenedor invisible.
 
@@ -163,31 +163,31 @@ El principal propósito del Fragment es actuar como un elemento contenedor invis
 
 ---
 
-### 📝 Sintaxis
+#### Sintaxis
 
-1.  **Sintaxis Abreviada (Recomendada):**
+1. **Sintaxis Abreviada (Recomendada):**
 
-    ```jsx
-    return (
-      <>
-        <h1>Elemento 1</h1>
-        <p>Elemento 2</p>
-      </>
-    );
-    ```
+   ```jsx
+   return (
+     <>
+       <h1>Elemento 1</h1>
+       <p>Elemento 2</p>
+     </>
+   );
+   ```
 
-2.  **Sintaxis Completa (Necesaria si se usa `key`):**
+2. **Sintaxis Completa (Necesaria si se usa `key`):**
 
-    ```jsx
-    import React, { Fragment } from "react";
+   ```jsx
+   import React, { Fragment } from "react";
 
-    return (
-      <Fragment key={item.id}>
-        <td>Celda 1</td>
-        <td>Celda 2</td>
-      </Fragment>
-    );
-    ```
+   return (
+     <Fragment key={item.id}>
+       <td>Celda 1</td>
+       <td>Celda 2</td>
+     </Fragment>
+   );
+   ```
 
 ### 1. Render (Renderizado)
 
