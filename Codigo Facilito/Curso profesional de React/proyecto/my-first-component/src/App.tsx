@@ -1,17 +1,18 @@
+import React from "react";
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
+const arrayOfNumbers: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
 function App() {
   const [count, setCount] = useState(0);
   const [value, setValue] = useState(0);
 
-  //Se establece un temporalizador para controlar el
-  // renderizado condicional
-  setTimeout(() => {
-    setValue(value + 1);
-  }, 5000);
+  const items: React.JSX.Element[] = arrayOfNumbers.map((item) => (
+    <li>{item}</li>
+  ));
 
   return (
     <>
@@ -38,6 +39,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+
+      {/* Renderizado de una lista no ordenada */}
+      <ul>{items}</ul>
     </>
   );
 }
