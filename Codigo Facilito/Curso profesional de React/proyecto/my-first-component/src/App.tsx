@@ -10,12 +10,11 @@ function App() {
   const [count, setCount] = useState(0);
   const [value, setValue] = useState(0);
 
-  //Ejemplo de renderizado de lista usando un For
-  let items: React.JSX.Element[] = [];
-
-  for (const item of arrayOfNumbers) {
-    items.push(<li>{item}</li>);
-  }
+  //un error común en no agregar la propiedad key a las listas
+  //por lo cual se colocara una key unica
+  const items: React.JSX.Element[] = arrayOfNumbers.map((item) => (
+    <li key={`array-number-item-${item}`}>{item}</li>
+  ));
 
   return (
     <>
