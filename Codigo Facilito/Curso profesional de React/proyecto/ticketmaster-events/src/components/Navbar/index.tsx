@@ -23,6 +23,10 @@ const Navbar = () => {
     */
   };
 
+  const handleInputKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log(evt);
+  };
+
   return (
     <>
       <p>Eventos</p>
@@ -30,6 +34,8 @@ const Navbar = () => {
       <input
         placeholder="Busca tu evento favorito"
         onChange={handlerInputchange}
+        //Se agrega un manejador para controlar la busqueda
+        onKeyDown={handleInputKeyDown}
         value={search}
       />
     </>
