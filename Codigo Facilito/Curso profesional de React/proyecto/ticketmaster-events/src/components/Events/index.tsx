@@ -1,13 +1,11 @@
 import { useState } from "react";
 import EventItem from "./components/EventItem";
 import eventJSON from "../../data/events.json";
-import type { Event } from "../../utils/eventInterface";
+import type { Event } from "../../utils/EventInterface";
 
 const Events = () => {
   const [data] = useState(eventJSON);
-  const {
-    _embedded: { events },
-  } = data;
+  const { _embedded: { events }} = data;
 
   const eventsComponents = events.map((event) => {
     const handlerEventItemClick = (id: string) => {
@@ -25,6 +23,9 @@ const Events = () => {
       <EventItem
         key={`event-item-${event.id}`}
         event={eventData}
+        /*Por buena practica se recomienda colocar el prefijo on a los 
+        eventos pasados como prop
+        */
         onEventClick={handlerEventItemClick}
       />
     );
