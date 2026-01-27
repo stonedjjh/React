@@ -284,6 +284,12 @@ React abstrae los eventos nativos y crea un objeto llamado SyntheticEvent (Event
 
 El "event bubbling" (burbujeo de eventos) en React se refiere al comportamiento en el que un evento se propaga desde el elemento hijo que lo originó hacia arriba en la jerarquía de componentes. React implementa el "event bubbling" de manera similar a cómo funciona en el DOM estándar de JavaScript.
 
+Se puede detener la propagación de eventos con el siguiente comando
+
+```JavaScript
+event.stopPropagation();
+```
+
 ### Event Propagation
 
 La propagación de eventos en React sigue el mismo principio del "bubbling" (burbujeo) que se mencionó anteriormente, donde un evento se propaga desde el elemento hijo que lo originó hacia arriba en la jerarquía de componentes.
