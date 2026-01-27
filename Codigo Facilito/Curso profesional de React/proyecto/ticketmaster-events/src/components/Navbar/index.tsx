@@ -1,7 +1,12 @@
 //Se importa useState para controlar estados en este caso del Input
 import { useState } from "react";
 
-const Navbar = () => {
+//se define una interface par alas props
+interface NavbarProps {
+  onSearch: (term: string) => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onSearch }) => {
   /*Se defina la variable que vinculara su estado con el input
   al ser inmutable React permite modificarla a traves del
   una funcion que por norma suele llevar el mismo nombre de la
@@ -23,8 +28,17 @@ const Navbar = () => {
     */
   };
 
+  /*
+  Este manejador, al presionar la tecla Enter, ejecuta la función pasada por props 
+  con el valor actual de search.
+
+  Esta prop es una función que, al ser llamada, actualiza el estado searchTerm 
+  en el componente padre.
+  */
   const handleInputKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(evt);
+    if (evt.key === "Enter") {
+      onSearch(search);
+    }
   };
 
   return (
