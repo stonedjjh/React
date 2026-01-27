@@ -331,3 +331,7 @@ useImperativeHandle es un hook de React que te permite personalizar los valores 
 componente padre accede al ref de un componente hijo.
 
 Este hook es útil cuando necesitas exponer métodos o propiedades específicas de un componente hijo al componente padre, pero deseas ocultar otras partes de su interfaz pública.
+
+### Nota sobre React.FC
+
+Usar `React.FC<Props>` (donde FC significa Function Component) es la forma más estándar de decirle a TypeScript: "Este es un componente de React y estas son sus propiedades".
