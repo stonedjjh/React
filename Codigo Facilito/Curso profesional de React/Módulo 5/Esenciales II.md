@@ -109,8 +109,8 @@ En este ejemplo, el evento `onClick` está asociado a la función `manejarClick`
 
 > [!IMPORTANT]
 > Se debe pasar una funcion `{manejarClick}` no llamar una funcion `{manejarClick()}`
- con una aleta seria `{() =>alert()}` no `{alert()}`
- Pasar código en línea así no lo ejecutara al hacer click; lo ejecutará cada vez que el componente se renderice.
+> con una aleta seria `{() =>alert()}` no `{alert()}`
+> Pasar código en línea así no lo ejecutara al hacer click; lo ejecutará cada vez que el componente se renderice.
 
 > [!TIP]
 > Si necesitas pasar argumentos a la función del manejador de eventos, puedes usar una
@@ -216,3 +216,38 @@ function ContenedorDeEventosStop() {
 ```
 
 En este segundo ejemplo, al hacer clic en el botón, solo se mostrará la alerta del hijo ("Evento del botón (Hijo) disparado y propagación detenida."), porque `event.stopPropagation()` impide que el evento llegue al `div` padre.
+
+## Hook
+
+Es una función especial que te permite "engancharte" (de ahí su nombre, hook) a las tripas de React. Te permiten usar el estado y otras características de la librería sin tener que escribir clases (esa forma vieja y enredada de programar React que ya casi no se usa).
+
+### Reglas
+
+- Solo se puede llamar en nivel superior: No llames Hooks dentro de bucles, condiciones o funciones anidadas.
+  - **Por qué:** React depende del **orden** en que se llaman los Hooks para asociar el estado correctamente entre renderizados.
+  - **Consecuencia:** Llamarlos siempre al inicio asegura que el orden sea constante cada vez que el componente se actualice.
+
+- Llama hooks solo en funciones de react: No llames Hooks desde funciones de JavaScript regulares.
+  - **Dónde sí:** En componentes funcionales de React.
+
+  - **Custom Hooks:** También puedes llamarlos desde tus propios Hooks personalizados (aquellos que empiezan con la palabra `use`).
+
+- No se pueden usar de manera condicional: Esta es una extensión de la primera regla.
+
+Nunca metas un Hook dentro de un `if`.
+
+- **Problema:** Si el `if` cambia de valor (de `true` a `false`), el siguiente Hook en la lista se "desplazará", y React le entregará los datos del Hook anterior, causando errores lógicos graves.
+
+---
+
+### 💡 Complementos para un Código Limpio (Clean Code)
+
+- **Nombramiento Estándar:** Los componentes deben empezar con **Mayúscula** (`Input.tsx`) y los Hooks con la palabra **`use`** (`useValidation.ts`). Esto permite que herramientas como ESLint detecten violaciones a las reglas automáticamente.
+
+- **Independencia:** Los Hooks deben ser atómicos. Si un Hook hace demasiadas cosas, es mejor dividirlo en dos Custom Hooks más pequeños.
+
+- **Evitar el "Prop Drilling":** Usa Hooks como `useContext` para pasar datos globales, evitando pasar props a través de componentes que no las necesitan.
+
+---
+
+**Nota Personal:** Recuerda que estas reglas son lo que permite que tu arquitectura sea escalable. Al seguirlas, evitas comportamientos impredecibles en el DOM.
