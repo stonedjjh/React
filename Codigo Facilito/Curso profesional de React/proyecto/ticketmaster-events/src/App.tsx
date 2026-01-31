@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Events from "./components/Events";
+import SignupForm from "./components/SignupForm";
 import "./App.css";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
     <>
       <Navbar onSearch={handlerNavbarSearch} />
       <Events searchTerm={searchTerm} />
+      <SignupForm />
     </>
   );
 }

@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 // import './App.css'
-import './Form.css'
+import "./Form.css";
 
 interface FormData {
   firstName: string;
@@ -10,7 +10,6 @@ interface FormData {
 }
 
 function Form() {
-  
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -25,13 +24,13 @@ function Form() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('este es nuestro formulario', formData)
+    console.log("este es nuestro formulario", formData);
   };
 
   const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("change");
     setName(event.target.value);
-  }
+  };
 
   return (
     <>
@@ -49,11 +48,7 @@ function Form() {
         </div>
         <div>
           <label>First Name</label>
-          <input
-            type="text"
-            name="firstName"
-            onChange={handleChange}
-          />
+          <input type="text" name="firstName" onChange={handleChange} />
         </div>
         <div>
           <label>Last Name</label>
@@ -67,11 +62,9 @@ function Form() {
           <button type="submit">Send</button>
         </div>
       </form>
-          { name ! == "" &&  <div >
-        Mi mensaje exitoso
-      </div>}
+      {name! == "" && <div>Mi mensaje exitoso</div>}
     </>
-  )
+  );
 }
 
-export default Form
+export default Form;
