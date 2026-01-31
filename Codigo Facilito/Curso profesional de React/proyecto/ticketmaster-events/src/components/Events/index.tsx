@@ -1,6 +1,5 @@
-import { useState } from "react";
 import EventItem from "./components/EventItem";
-import eventJSON from "../../data/events.json";
+import useEventsData from "../../hooks/useEventsData";
 import type { Event } from "../../utils/EventInterface";
 
 interface EventsProps {
@@ -8,10 +7,8 @@ interface EventsProps {
 }
 
 const Events: React.FC<EventsProps> = ({ searchTerm }) => {
-  const [data] = useState(eventJSON);
-  const {
-    _embedded: { events },
-  } = data;
+  //se usa el custom hook creado
+  const { events } = useEventsData();
 
   console.log({ searchTerm });
   const handlerEventItemClick = (id: string) => {
