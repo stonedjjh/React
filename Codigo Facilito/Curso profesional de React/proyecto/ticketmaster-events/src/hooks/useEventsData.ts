@@ -1,21 +1,24 @@
 //Se cambio useState a useRef, también se agregar useRef
-import { useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import eventsJSON from "../data/events.json";
 
 // Definimos el tipo basado en la estructura del JSON
 type EventsData = typeof eventsJSON;
 
 const useEventsData = () => {
-  const data = useRef<EventsData | null>(null);
+  //desectruturamos el useState
+  const [data, setData] = useState<EventsData | null>(null);
 
   useEffect(() => {
     setTimeout(() => {
-      data.current = eventsJSON;
+      //se usa la función set para actualizar el estado
+      setData(eventsJSON);
     }, 4000);
   }, []); //
 
   return {
-    events: data.current?._embedded?.events || [],
+    //current se usa  con ref por lo cual se quita
+    events: data?._embedded?.events || [],
   };
 };
 
