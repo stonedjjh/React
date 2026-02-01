@@ -15,7 +15,7 @@ function App() {
     <>
       <Navbar onSearch={handlerNavbarSearch} />
       <Events searchTerm={searchTerm} />
-      <SignupForm />
+      {/* <SignupForm /> */}
     </>
   );
 }

@@ -1,24 +1,30 @@
-//Se cambio useState a useRef, también se agregar useRef
 import { useState, useEffect } from "react";
 import eventsJSON from "../data/events.json";
 
-// Definimos el tipo basado en la estructura del JSON
 type EventsData = typeof eventsJSON;
 
 const useEventsData = () => {
-  //desectruturamos el useState
   const [data, setData] = useState<EventsData | null>(null);
+  //se agregan estas variables para controlar la carga y erroes
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null | unknown>(null);
 
   useEffect(() => {
     setTimeout(() => {
-      //se usa la función set para actualizar el estado
-      setData(eventsJSON);
+      //se maneja error con try
+      try {
+        setData(eventsJSON);
+        setIsLoading(false);
+      } catch (error) {
+        setError(error);
+      }
     }, 4000);
   }, []); //
 
   return {
-    //current se usa  con ref por lo cual se quita
     events: data?._embedded?.events || [],
+    isLoading,
+    error,
   };
 };
 
