@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import type { dataImperativeHandle } from "./components/Navbar";
 import Events from "./components/Events";
+import Routes from "./routes";
 import "./App.css";
 
 function App() {
@@ -17,12 +18,7 @@ function App() {
     setSearchTerm(term);
   };
 
-  return (
-    <>
-      <Navbar onSearch={handlerNavbarSearch} ref={containerRef} />
-      <Events searchTerm={searchTerm} />
-    </>
-  );
+  return <Routes />;
 }
 
 export default App;
