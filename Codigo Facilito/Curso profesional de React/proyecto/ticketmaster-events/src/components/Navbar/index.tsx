@@ -1,12 +1,16 @@
 //Se importa useState para controlar estados en este caso del Input
-import { useState } from "react";
+import { useState, useEffect, forwardRef } from "react";
 
-//se define una interface par alas props
+//se define una interface para las props
 interface NavbarProps {
   onSearch: (term: string) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onSearch }) => {
+/*
+para poder recibir una referencia desde el padre hay que envolver la funcion
+en un forwardRef
+*/
+const Navbar = forwardRef<HTMLDivElement, NavbarProps>(({ onSearch }, ref) => {
   /*Se defina la variable que vinculara su estado con el input
   al ser inmutable React permite modificarla a traves del
   una funcion que por norma suele llevar el mismo nombre de la
@@ -14,6 +18,23 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch }) => {
   Nota aqui estamos usando una destructuración
   */
   const [search, setSearch] = useState<string>("");
+
+  /*ejemplos de <useEffect></useEffect>*/
+
+  //se activa cuando detecta un cambio en onSearch
+  useEffect(() => {
+    console.log("onSearch cambio");
+  }, [onSearch]);
+
+  //se activa en el primer render
+  useEffect(() => {
+    console.log("componente listo");
+  }, []);
+
+  //se activa cuando search cambia
+  useEffect(() => {
+    console.log("search cambio");
+  }, [search]);
 
   const handlerInputchange = (event: React.ChangeEvent<HTMLInputElement>) => {
     /* cuando se dectecta un cambio en el input seteamos su valor a la variable
@@ -42,7 +63,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch }) => {
   };
 
   return (
-    <>
+    <div ref={ref}>
       <p>Eventos</p>
       {/* Controlled Component */}
       <input
@@ -52,8 +73,11 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch }) => {
         onKeyDown={handleInputKeyDown}
         value={search}
       />
-    </>
+    </div>
   );
-};
+});
+
+//como forwarRef envuelve una funcion anonima se le da un nombre que mostrar a la función
+Navbar.displayName = "Navbar";
 
 export default Navbar;

@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Navbar from "./components/Navbar";
 import Events from "./components/Events";
-import SignupForm from "./components/SignupForm";
 import "./App.css";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handlerNavbarSearch = (term: string) => {
     setSearchTerm(term);
@@ -13,9 +13,8 @@ function App() {
 
   return (
     <>
-      <Navbar onSearch={handlerNavbarSearch} />
+      <Navbar onSearch={handlerNavbarSearch} ref={containerRef} />
       <Events searchTerm={searchTerm} />
-      {/* <SignupForm /> */}
     </>
   );
 }

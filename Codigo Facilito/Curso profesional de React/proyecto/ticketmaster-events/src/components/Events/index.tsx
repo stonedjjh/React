@@ -7,8 +7,8 @@ interface EventsProps {
 }
 
 const Events: React.FC<EventsProps> = ({ searchTerm }) => {
-  //se usa el custom hook creado
-  const { events } = useEventsData();
+  //se destructuran las nuevas variables
+  const { events, isLoading, error } = useEventsData();
 
   console.log({ searchTerm });
   const handlerEventItemClick = (id: string) => {
@@ -44,6 +44,14 @@ const Events: React.FC<EventsProps> = ({ searchTerm }) => {
       );
     });
   };
+
+  if (error) {
+    return <div>Ocurrió un error: {String(error)}</div>;
+  }
+
+  if (isLoading) {
+    return <div>Cargando eventos...</div>;
+  }
 
   return (
     <div>
