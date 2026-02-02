@@ -1,3 +1,4 @@
+import "./styles.css";
 import React from "react";
 import type { Event } from "../../../../utils/EventInterface";
 
@@ -20,11 +21,15 @@ const EventItem: React.FC<EventItemProps> = ({ event, onEventClick }) => {
 
   return (
     // Se adjunta la función 'onEventClick'
-    <div>
-      <h4>{event.name}</h4>
+    <div className="event-item-container">
       <img src={event.image} alt={event.name} width={200} height={200} />
-      <p>{event.info}</p>
-      <button onClick={handleSeeMoreClick}>Ver más</button>
+      <div className="event-info-container">
+        <h4 className="event-name">{event.name}</h4>
+        <p className="event-info">{event.info}</p>
+        <button className="see-moro-btn" onClick={handleSeeMoreClick}>
+          Ver más
+        </button>
+      </div>
     </div>
   );
 };
