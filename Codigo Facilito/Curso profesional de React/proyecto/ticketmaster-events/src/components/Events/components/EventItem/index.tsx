@@ -1,4 +1,5 @@
-import "./styles.css";
+//para importar modulo se usa la sigueinte sintaxis
+import styles from "./EventItem.module.css";
 import React from "react";
 import type { Event } from "../../../../utils/EventInterface";
 
@@ -21,12 +22,12 @@ const EventItem: React.FC<EventItemProps> = ({ event, onEventClick }) => {
 
   return (
     // Se adjunta la función 'onEventClick'
-    <div className="event-item-container">
+    <div className={styles.eventItemContainer}>
       <img src={event.image} alt={event.name} width={200} height={200} />
-      <div className="event-info-container">
-        <h4 className="event-name">{event.name}</h4>
-        <p className="event-info">{event.info}</p>
-        <button className="see-moro-btn" onClick={handleSeeMoreClick}>
+      <div className={styles.eventInfoContainer}>
+        <h4 className={styles.eventName}>{event.name}</h4>
+        <p className={styles.eventInfo}>{event.info}</p>
+        <button className={styles.seeMoreBtn} onClick={handleSeeMoreClick}>
           Ver más
         </button>
       </div>
