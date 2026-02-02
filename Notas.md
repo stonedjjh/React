@@ -32,6 +32,34 @@ Un Hook (Gancho) es una función especial que te permite "enganchar" (utilizar) 
 
 Antes de la existencia de los Hooks, estas características solo estaban disponibles en los componentes de clase. Con los Hooks, puedes escribir componentes de React que son más limpios, más concisos y más fáciles de probar.
 
+### Nota: Ejecución doble de Hooks en Desarrollo
+
+### 📝 Observación
+
+En el entorno de desarrollo, notarás que los **Hooks** (como `useEffect`, `useState` o el cuerpo de la función del componente) se ejecutan **dos veces** consecutivas. Esto es normal y no ocurre en la versión de producción.
+
+### ❓ ¿Por qué sucede?
+
+Esto es causado por el componente **`<StrictMode>`**, que suele envolver la aplicación en el archivo `main.tsx` o `index.tsx`.
+
+- **Propósito:** React fuerza este doble renderizado para ayudarte a encontrar **efectos secundarios no deseados** (side effects).
+
+- **Detección de impurezas:** React asume que tus componentes deben ser "funciones puras". Al llamar al componente dos veces, React verifica si el resultado cambia o si dejas procesos abiertos (como suscripciones o timers) sin limpiar.
+
+- **Prueba de Resiliencia:** Ayuda a asegurar que tu lógica de "limpieza" (el `return` en un `useEffect`) funcione correctamente.
+
+### ⚠️ Reglas para manejarlo
+
+1. **No entres en pánico:** Si ves dos `console.log` en la consola, no significa que tu código esté mal.
+
+2. **Efectos Secundarios:** Asegúrate siempre de limpiar tus efectos. Si abres un `EventListener` o un `setInterval`, debes cerrarlo en la función de retorno del `useEffect`.
+
+3. **No uses `useEffect` para lógica de negocio crítica:** Si algo solo debe ocurrir UNA vez (como una compra o un envío de formulario), esa lógica debería estar en un manejador de eventos (como el `onClick` de tu botón personalizado) y no en el `useEffect`.
+
+---
+
+**Tip de Arquitectura:** Si el doble renderizado rompe tu aplicación, es una señal clara de que tu componente tiene una **impureza** o un **efecto secundario** que no está bien gestionado. ¡Es mejor que falle en desarrollo a que falle con el usuario final!
+
 ### useState
 
 El Hook useState es la forma más básica de agregar estado (datos que cambian y que afectan la vista) a un componente funcional de React.
@@ -335,3 +363,23 @@ Este hook es útil cuando necesitas exponer métodos o propiedades específicas 
 ### Nota sobre React.FC
 
 Usar `React.FC<Props>` (donde FC significa Function Component) es la forma más estándar de decirle a TypeScript: "Este es un componente de React y estas son sus propiedades".
+
+### Custom Hooks: La navaja suiza de React
+
+Es una función de JavaScript que encapsula lógica reutilizable y puede llamar a otros Hooks de React. Su objetivo principal es la **Separación de Responsabilidades** (Separation of Concerns).
+
+#### Características clave
+
+- **Nombre:** Siempre debe empezar con la palabra `use` (ej. `useEvents`, `useForm`). Esto le indica a React que debe aplicar las "Reglas de los Hooks".
+
+- **Compositor de lógica:** Permite extraer el "cómo se hace algo" (lógica de estado, fetch, validación) para que el componente solo se encargue del "qué se muestra" (JSX).
+
+- **Aislado pero reactivo:** Cada vez que un componente usa el Hook, obtiene un estado **independiente**, pero si el estado dentro del Hook cambia, el componente se re-renderiza automáticamente.
+
+#### Cuándo crearlos (El criterio del Arquitecto)
+
+1. **DRY (Don't Repeat Yourself):** Cuando ves que estás repitiendo el mismo `useEffect` o lógica de validación en varios componentes (como tus `Inputs`).
+
+2. **Componentes Gigantes:** Cuando un componente tiene más lógica de JS que código HTML/JSX. Sacar la lógica a un Hook lo hace legible.
+
+3. **Testabilidad:** Es mucho más fácil probar una función de lógica pura (el Hook) que probar un componente visual entero.
