@@ -1,6 +1,7 @@
 import EventItem from "./components/EventItem";
 import useEventsData from "../../hooks/useEventsData";
 import type { Event } from "../../utils/EventInterface";
+import { useNavigate } from "react-router";
 
 interface EventsProps {
   searchTerm: string;
@@ -10,9 +11,11 @@ const Events: React.FC<EventsProps> = ({ searchTerm }) => {
   //se destructuran las nuevas variables
   const { events, isLoading, error } = useEventsData();
 
+  const navigate = useNavigate();
+
   console.log({ searchTerm });
   const handlerEventItemClick = (id: string) => {
-    console.log("Evento clickeado", id);
+    navigate(`/detail/${id}`);
   };
 
   const eventsComponents = () => {

@@ -2,7 +2,6 @@
 import styles from "./EventItem.module.css";
 import React from "react";
 import type { Event } from "../../../../utils/EventInterface";
-import { Link } from "react-router";
 
 // 1. Definición de la Interfaz de Props Única
 interface EventItemProps {
@@ -29,7 +28,7 @@ const EventItem: React.FC<EventItemProps> = ({ event, onEventClick }) => {
         <h4 className={styles.eventName}>{event.name}</h4>
         <p className={styles.eventInfo}>{event.info}</p>
         <button className={styles.seeMoreBtn} onClick={handleSeeMoreClick}>
-          <Link to={`\detail\\${event.id}`}>Ver más</Link>
+          Ver más
         </button>
       </div>
     </div>
