@@ -10,16 +10,22 @@ const useEventsData = () => {
   const [error, setError] = useState<string | null | unknown>(null);
 
   useEffect(() => {
-    setTimeout(() => {
-      //se maneja error con try
+    const fetchEvents = async () => {
       try {
-        setData(eventsJSON);
+        const response = await fetch(
+          "https://app.ticketmaster.com/discovery/v2/events.json?apikey=&countryCode=MX",
+        );
+
+        const data = await response.json();
+        setData(data);
         setIsLoading(false);
       } catch (error) {
         setError(error);
       }
-    }, 4000);
-  }, []); //
+    };
+
+    fetchEvents();
+  }, []);
 
   return {
     events: data?._embedded?.events || [],
