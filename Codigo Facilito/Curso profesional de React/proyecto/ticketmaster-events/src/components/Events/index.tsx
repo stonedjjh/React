@@ -1,33 +1,26 @@
 import EventItem from "./components/EventItem";
-import useEventsData from "../../hooks/useEventsData";
 import type { Event } from "../../utils/EventInterface";
 import { useNavigate } from "react-router";
 
+import eventsJSON from "../../data/events.json";
+
+type EventsData = typeof eventsJSON;
+
 interface EventsProps {
   searchTerm: string;
+  events: EventsData["_embedded"]["events"];
 }
 
-const Events: React.FC<EventsProps> = ({ searchTerm }) => {
+const Events: React.FC<EventsProps> = ({ searchTerm, events }) => {
   //se destructuran las nuevas variables
-  const { events, isLoading, error } = useEventsData();
 
   const navigate = useNavigate();
-
-  console.log({ searchTerm });
   const handlerEventItemClick = (id: string) => {
     navigate(`/detail/${id}`);
   };
 
   const eventsComponents = () => {
     let eventsFiltered = events;
-
-    if (searchTerm.trim().length > 0) {
-      console.log({ searchTerm });
-      eventsFiltered = eventsFiltered.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm),
-      );
-    }
-
     return eventsFiltered.map((event) => {
       const eventData: Event = {
         id: event.id,
@@ -47,14 +40,6 @@ const Events: React.FC<EventsProps> = ({ searchTerm }) => {
       );
     });
   };
-
-  if (error) {
-    return <div>Ocurrió un error: {String(error)}</div>;
-  }
-
-  if (isLoading) {
-    return <div>Cargando eventos...</div>;
-  }
 
   return (
     <div>
