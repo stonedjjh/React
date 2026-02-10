@@ -1,3 +1,5 @@
 # Carpetas temporales de Google Drive (descargas y subidas)
 .tmp.drivedownload/
 .tmp.driveupload/
+node_modules/date-fns/
+Codigo Facilito/Curso profesional de React/proyecto/ticketmaster-events/.env
