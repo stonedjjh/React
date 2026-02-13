@@ -1,42 +1,10 @@
-import { useState } from "react";
-import eventsJSON from "../data/events.json";
-
-type EventsData = typeof eventsJSON;
-
-interface PageData {
-  size: number;
-  totalElements: number;
-  totalPages: number;
-  number: number;
-}
-
-interface UseEventsDataReturn {
-  events: EventsData["_embedded"]["events"];
-  page: PageData;
-  isLoading: boolean;
-  error: string | null | unknown;
-  fetchEvents: (params?: string) => Promise<void>;
-}
+import useEventsResults from "../state/events-results";
+import type { UseEventsDataReturn, PageData } from "../types/EventsData";
 
 const useEventsData = (): UseEventsDataReturn => {
-  const [data, setData] = useState<EventsData | null>(null);
-  //se agregan estas variables para controlar la carga y erroes
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null | unknown>(null);
-
-  const fetchEvents = async (params?: string) => {
-    try {
-      const response = await fetch(
-        `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${import.meta.env.VITE_TICKETMASTER_API_KEY}&countryCode=MX${params?.length ? params : ""}`,
-      );
-
-      const data = await response.json();
-      setData(data);
-      setIsLoading(false);
-    } catch (error) {
-      setError(error);
-    }
-  };
+  //Se movio data, isLoading y error a un manejador de estado
+  //state/events-results
+  const { data, isLoading, error, fetchEvents } = useEventsResults();
 
   const auxPage: PageData = {
     size: 0,
@@ -44,8 +12,8 @@ const useEventsData = (): UseEventsDataReturn => {
     totalPages: 0,
     number: 0,
   };
-
-  if (data) {
+  console.log(data);
+  if (data && Object.keys(data).length > 0 && data.page) {
     auxPage.size = data.page.size;
     auxPage.totalElements = data.page.totalElements;
     auxPage.totalPages = data.page.totalPages;
