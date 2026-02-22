@@ -99,7 +99,7 @@ function Contador() {
   return (
     <div>
       <p>Hiciste clic {conteo} veces</p>
-      <button onClick={() => setConteo(conteo + 1)}>
+      <button onClick={() => setConteo(prevCount => prevCount + 1)}>
         Haz clic aquí
       </button>
     </div>
@@ -167,7 +167,7 @@ function TituloDinamico() {
   return (
     <div>
       <p>El título de la pestaña está cambiando...</p>
-      <button onClick={() => setConteo(conteo + 1)}>
+      <button onClick={() => setConteo(prevCount => prevCount + 1)}>
         Incrementar
       </button>
     </div>
@@ -175,13 +175,522 @@ function TituloDinamico() {
 }
 ```
 
-### Fragment
+### useContext
+
+`useContext` es un Hook de React que permite suscribirse al **Context API**. Se utiliza para acceder a datos globales (como el tema, el usuario autenticado o el idioma) sin tener que pasar "props" manualmente a través de cada nivel de la estructura de componentes (evitando el _Prop Drilling_).
+
+Sintaxis
+
+```JavaScript
+const valor = useContext(NombreDelContexto);
+```
+
+- **NombreDelContexto**: Es el objeto creado previamente con createContext.
+
+- **Sincronización**: Cuando el valor del proveedor (Provider) cambia, todos los componentes que usan este Hook se re-renderizan automáticamente con el nuevo valor.
+
+En este ejemplo, creamos un contexto para el tema de la aplicación. El componente BotonColor puede acceder al color de manera amigable sin recibir ninguna prop de sus padres.
+
+```JavaScript
+import React, { createContext, useContext, useState } from 'react';
+
+// 1. Creamos el contexto (fuera del componente)
+const TemaContext = createContext();
+
+function App() {
+  const [color, setColor] = useState("blue");
+
+  return (
+    // 2. Proveemos el valor a toda la rama de componentes
+    <TemaContext.Provider value={color}>
+      <Layout />
+    </TemaContext.Provider>
+  );
+}
+
+function Layout() {
+  return <BotonColor />; // No pasamos props aquí
+}
+
+function BotonColor() {
+  // 3. Consumimos el estado de manera amigable
+  const colorActual = useContext(TemaContext);
+
+  return (
+    <button style={{ backgroundColor: colorActual }}>
+      Mi color es {colorActual}
+    </button>
+  );
+}
+```
+
+---
+
+### useCallback
+
+El Hook useCallback es una función que devuelve una versión memoizada de la función que le pasas. Es útil para evitar que se creen nuevas funciones en cada renderizado, lo que puede mejorar el rendimiento en ciertos casos, especialmente cuando se pasan funciones como props a componentes hijos.
+
+Sintaxis
+
+```JavaScript
+const memoizedCallback = useCallback(
+  () => {
+    // Función que quieres memoizar
+  },
+  [dependencias], // Array de dependencias
+);
+```
+
+### useRef
+
+useRef es un hook de React que se utiliza para crear y mantener una referencia mutable que persiste a lo largo del ciclo de vida del componente.
+
+A diferencia de las variables de estado (useState), los cambios en el objeto ref no provocan una nueva renderización del componente. useRef es comúnmente utilizado para acceder y manipular el DOM directamente, o para almacenar valores que no provocan una renderización cuando cambian.
+
+En este ejemplo, usamos `useRef` para acceder a un elemento `<input>` del DOM y ponerle el foco automáticamente cuando el usuario hace clic en un botón.
+
+```JavaScript
+import React, { useRef } from 'react';
+
+function EnfoqueInput() {
+  // 1. Creamos la referencia inicializada en null
+  const inputRef = useRef(null);
+
+  const manejarClic = () => {
+    // 3. Accedemos al nodo del DOM mediante la propiedad .current
+    // Esto pone el foco en el input sin re-renderizar el componente
+    inputRef.current.focus();
+    inputRef.current.style.backgroundColor = "#e2e8f0";
+  };
+
+  return (
+    <div className="p-4">
+      {/* 2. Vinculamos la referencia al elemento usando el atributo 'ref' */}
+      <input ref={inputRef} type="text" placeholder="Escribe algo..." />
+      <button onClick={manejarClic}>
+        Enfocar el input
+      </button>
+    </div>
+  );
+}
+```
+
+### forwardRef
+
+forwardRef es una función en React que te permite pasar un ref a un componente hijo directamente al componente hijo, sin tener que pasar por el componente intermedio.
+
+En situaciones normales, cuando tienes un componente intermedio que envuelve otro componente y quieres pasar un ref al componente interno, puedes encontrarte con problemas. forwardRef soluciona este problema permitiéndote pasar el ref directamente al componente hijo.
+
+En este ejemplo, el componente `Formulario` (padre) crea una referencia y la pasa al componente `InputPersonalizado` (hijo). Gracias a `forwardRef`, el padre puede acceder directamente al `<input>` que está dentro del hijo.
+
+```JavaScript
+import React, { useRef, forwardRef } from 'react';
+
+// 1. Envolvemos el componente hijo con forwardRef
+const InputPersonalizado = forwardRef((props, ref) => {
+  return (
+    <div className="contenedor-input">
+      <label>{props.label}</label>
+      {/* 2. Conectamos la ref que viene del padre al elemento real */}
+      <input ref={ref} className="mi-input-estilizado" />
+    </div>
+  );
+});
+
+function Formulario() {
+  // 3. Creamos la referencia en el padre
+  const inputRef = useRef(null);
+
+  const enfocarHijo = () => {
+    // 5. Ahora podemos manipular el input que está "dentro" del hijo
+    inputRef.current.focus();
+  };
+
+  return (
+    <div>
+      {/* 4. Pasamos la ref como si fuera una prop normal */}
+      <InputPersonalizado ref={inputRef} label="Nombre de usuario:" />
+      <button onClick={enfocarHijo}>
+        Activar Input del Hijo
+      </button>
+    </div>
+  );
+}
+```
+
+### useImperativeHandle
+
+useImperativeHandle es un hook de React que te permite personalizar los valores que son expuestos cuando un componente padre accede al ref de un componente hijo.
+
+Este hook es útil cuando necesitas exponer métodos o propiedades específicas de un componente hijo al componente padre, pero deseas ocultar otras partes de su interfaz pública.
+
+En este ejemplo, el componente `InputSeguro` (hijo) solo le permite al padre llamar a una función `enfocarYSaludar`. El padre no puede cambiar el color, el valor o borrar el input directamente, porque el hijo ha limitado su interfaz.
+
+```JavaScript
+import React, { useRef, useImperativeHandle, forwardRef } from 'react';
+
+// 1. El Hijo usa forwardRef para recibir la ref del padre
+const InputSeguro = forwardRef((props, ref) => {
+  const inputInternoRef = useRef(null);
+
+  // 2. Definimos qué funciones "exponemos" al control del padre
+  useImperativeHandle(ref, () => ({
+    enfocarYSaludar: () => {
+      inputInternoRef.current.focus();
+      alert("¡Hola! El padre me pidió que me enfocara.");
+    }
+  }));
+
+  return <input ref={inputInternoRef} type="text" className="border p-2" />;
+});
+
+function PanelControl() {
+  const hijoRef = useRef(null);
+
+  const ejecutarAccion = () => {
+    // 3. El padre llama a la función personalizada, no al .focus() nativo
+    hijoRef.current.enfocarYSaludar();
+  };
+
+  return (
+    <div>
+      <InputSeguro ref={hijoRef} />
+      <button onClick={ejecutarAccion}>
+        Pedir al hijo que salude
+      </button>
+    </div>
+  );
+}
+```
+
+### useLayoutEffect
+
+`useLayoutEffect` es una versión de `useEffect` que se dispara de forma **sincrónica** inmediatamente después de que React haya realizado todas las mutaciones en el DOM, pero **antes** de que el navegador tenga la oportunidad de "pintar" (renderizar visualmente) los cambios en la pantalla.
+
+Se utiliza principalmente para realizar mediciones del DOM (como obtener el ancho o la posición de un elemento) y realizar cambios visuales basados en esas mediciones, evitando así los "parpadeos" o saltos visuales que ocurrirían si se usara un `useEffect` normal.
+
+Sintaxis
+
+```JavaScript
+useLayoutEffect(() => {
+  // 1. Código del efecto (medición o mutación del DOM)
+
+  return () => {
+    // 2. Opcional: Función de limpieza
+  };
+}, [dependencias]);
+```
+
+- **Ejecución Sincrónica**: A diferencia de useEffect (que es asíncrono), este Hook bloquea el pintado del navegador hasta que el código dentro del efecto termina de ejecutarse.
+
+- **Uso Recomendado**: Solo debe usarse cuando necesites medir el DOM y ajustar la interfaz inmediatamente para que el usuario no vea un estado intermedio erróneo (como posiciones saltando o tamaños ajustándose tarde).
+
+Ejemplo
+
+En este ejemplo, usamos useLayoutEffect para medir la posición de un botón y posicionar un mensaje de ayuda (Tooltip) exactamente encima de él antes de que el navegador realice el primer pintado.
+
+```JavaScript
+import React, { useState, useRef, useLayoutEffect } from 'react';
+
+function TooltipEspecial() {
+  const [mostrar, setMostrar] = useState(false);
+  const [posicion, setPosicion] = useState(0);
+  const botonRef = useRef(null);
+  const tooltipRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (mostrar && botonRef.current && tooltipRef.current) {
+      // Medimos la posición real del botón en el DOM
+      const { bottom } = botonRef.current.getBoundingClientRect();
+
+      // Ajustamos la posición del tooltip ANTES de que el navegador pinte
+      setPosicion(bottom + 10);
+    }
+  }, [mostrar]);
+
+  return (
+    <div style={{ padding: '50px' }}>
+      <button ref={botonRef} onClick={() => setMostrar(!mostrar)}
+        {mostrar ? 'Ocultar' : 'Mostrar'} Tooltip
+      />
+
+      {mostrar && (
+        <div
+          ref={tooltipRef}
+          style={{
+            position: 'absolute',
+            top: `${posicion}px`,
+            background: 'black',
+            color: 'white',
+            padding: '5px'
+          }}
+        >
+          ¡Soy un Tooltip posicionado sin parpadeos!
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### useDebugValue
+
+`useDebugValue` es un Hook de React destinado exclusivamente a ser usado dentro de **Custom Hooks**. Su función es proporcionar una etiqueta o mensaje personalizado en las **React DevTools**, lo que facilita enormemente la depuración al permitir visualizar el estado interno del hook sin necesidad de usar `console.log`.
+
+Sintaxis
+
+```JavaScript
+useDebugValue(valor, (v) => /* formateador opcional */);
+```
+
+- **valor**: El dato o estado que quieres monitorear (por ejemplo, si un usuario está conectado o no).
+
+- **formateador (opcional)**: Una función que recibe el valor y devuelve una cadena formateada. Solo se ejecuta si las herramientas de desarrollo están abiertas, lo que evita procesos innecesarios en producción.
+
+Siguiendo la explicación del profesor, utilizamos useDebugValue dentro de un hook personalizado para que el estado de conexión sea legible y amigable en el inspector.
+
+```JavaScript
+import { useState, useEffect, useDebugValue } from 'react';
+
+function useFriendStatus(friendID) {
+  const [isOnline, setIsOnline] = useState(null);
+
+  // Muestra una etiqueta amigable en las React DevTools
+  // Ejemplo: "FriendStatus: Online"
+  useDebugValue(isOnline ? 'Online' : 'Offline');
+
+  useEffect(() => {
+    const handleStatusChange = (status) => setIsOnline(status.isOnline);
+    ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);
+
+    return () => ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange);
+  }, [friendID]);
+
+  return isOnline;
+}
+```
+
+### useDeferredValue
+
+`useDeferredValue` es un Hook de React que permite posponer la actualización de una parte de la interfaz que es costosa de procesar. Se utiliza para mantener la aplicación fluida, permitiendo que las interacciones urgentes (como escribir en un input) se reflejen de inmediato, mientras que los resultados más pesados (como filtrar una lista grande) se actualicen con un ligero retraso.
+
+A diferencia de técnicas como el _debounce_ o _throttle_, no espera un tiempo fijo, sino que React intenta realizar la actualización diferida inmediatamente después de que el navegador haya terminado de procesar la interacción urgente.
+
+Sintaxis
+
+```JavaScript
+const valorDiferido = useDeferredValue(valorReal);
+```
+
+- **valorReal**: El valor que quieres diferir (normalmente un estado que cambia rápidamente, como el texto de una búsqueda).
+
+- **valorDiferido**: Una copia del valor que "va por detrás". Durante una actualización urgente, React mantendrá el valor viejo aquí hasta que tenga un momento libre para procesar el nuevo.
+
+En este ejemplo, el input de búsqueda es fluido porque el estado busqueda se actualiza al instante. Sin embargo, la ListaResultados usa el valor diferido, por lo que no bloquea la escritura del usuario mientras procesa el filtrado de miles de elementos.
+
+```JavaScript
+import { useState, useDeferredValue } from 'react';
+import ListaResultados from './ListaResultados';
+
+function BuscadorPokemon() {
+  const [busqueda, setBusqueda] = useState('');
+
+  // Creamos una versión diferida del texto de búsqueda
+  const busquedaDiferida = useDeferredValue(busqueda);
+
+  return (
+    <>
+      <input
+        value={busqueda}
+        onChange={e => setBusqueda(e.target.value)}
+        placeholder="Buscar Pokémon..."
+      />
+      {/* La lista recibirá el valor nuevo un poco más tarde,
+          permitiendo que el input no se trabe al escribir.
+      */}
+      <ListaResultados filtro={busquedaDiferida} />
+    </>
+  );
+}
+```
+
+---
+
+### useTransition
+
+`useTransition` es un Hook de React que te permite marcar actualizaciones de estado como "transiciones" no urgentes. Esto le indica a React que otras actualizaciones (como escribir en un input) deben tener prioridad sobre esta, evitando que la interfaz se bloquee mientras se procesan cambios pesados.
+
+A diferencia de `useDeferredValue` (que difiere un valor), `useTransition` envuelve la **acción** que provoca el cambio de estado.
+
+Sintaxis
+
+```JavaScript
+const [isPending, startTransition] = useTransition();
+```
+
+- **isPending**: Un booleano que es true mientras la transición está pendiente, permitiéndote mostrar un indicador de carga (spinner).
+
+- **startTransition**: Una función que envuelve el setState que quieres marcar como baja prioridad.
+
+En este ejemplo, cuando el usuario hace clic en un tab, la actualización del contenido (que es pesada) se marca como transición. Esto permite que la navegación siga respondiendo aunque el contenido tarde en renderizarse.
+
+```JavaScript
+import { useState, useTransition } from 'react';
+
+function TabContainer() {
+  const [isPending, startTransition] = useTransition();
+  const [tab, setTab] = useState('inicio');
+
+  function seleccionarTab(proximoTab) {
+    // Marcamos el cambio de pestaña como una transición
+    startTransition(() => {
+      setTab(proximoTab);
+    });
+  }
+
+  return (
+    <div>
+      <button onClick={() => seleccionarTab('inicio')}>Inicio</button>
+      <button onClick={() => seleccionarTab('perfil')}>Perfil (Pesado)</button>
+
+      {/* Usamos isPending para que la UI sea amigable y el usuario sepa que algo carga */}
+      {isPending && <p>Cargando contenido pesado...</p>}
+
+      <Contenido tab={tab} />
+    </div>
+  );
+}
+```
+
+---
+
+### useId
+
+`useId` es un Hook de React que se utiliza para generar IDs únicos que son estables tanto en el lado del servidor como en el cliente. Su propósito principal es mejorar la accesibilidad (A11y) al vincular elementos HTML, como etiquetas `<label>` con sus respectivos `<input>`, evitando colisiones de IDs cuando un mismo componente se renderiza varias veces en la misma página.
+
+Sintaxis
+
+```JavaScript
+const id = useId();
+```
+
+---
+
+### useMemo
+
+`useMemo` es un Hook de React que se utiliza para memorizar el **resultado** de un cálculo costoso. Su función es evitar que operaciones pesadas o transformaciones de datos se vuelvan a ejecutar en cada renderizado, a menos que sus dependencias cambien, mejorando significativamente el rendimiento de la aplicación.
+
+Sintaxis
+
+```JavaScript
+const resultadoMemorizado = useMemo(() => {
+  return calcularAlgoPesado(a, b);
+}, [a, b]);
+```
+
+- **Cálculo**: Una función pura que devuelve el valor que quieres memorizar.
+
+- **Dependencias**: El cálculo solo se volverá a ejecutar si alguno de los valores en el arreglo (a o b) cambia.
+
+- **Diferencia con useCallback**: Mientras que useCallback memoriza la función en sí, useMemo memoriza el resultado de ejecutar esa función.
+
+En este ejemplo, filtramos una lista masiva de Pokémon. Gracias a useMemo, el filtrado solo ocurre cuando el usuario escribe en el buscador o la lista original cambia, evitando que la app se trabe por re-renderizados innecesarios.
+
+```JavaScript
+import React, { useState, useMemo } from 'react';
+
+function ListaPokemon({ pokemons }) {
+  const [busqueda, setBusqueda] = useState("");
+
+  // Memorizamos el resultado del filtrado
+  const pokemonsFiltrados = useMemo(() => {
+    console.log("Filtrando lista de manera eficiente...");
+    return pokemons.filter(p =>
+      p.name.toLowerCase().includes(busqueda.toLowerCase())
+    );
+  }, [pokemons, busqueda]); // Solo se recalcula si cambia la lista o la búsqueda
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        placeholder="Buscar..."
+      />
+      <ul>
+        {pokemonsFiltrados.map(p => (
+          <li key={p.id}>{p.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+---
+
+### useReducer
+
+`useReducer` es un Hook de React que se utiliza para el manejo de estados complejos. Sigue un patrón similar a Redux, donde las actualizaciones de estado se centralizan en una función llamada **reducer**, la cual decide cómo cambia el estado basándose en una "acción" enviada.
+
+Es especialmente útil cuando un componente tiene lógica de estado que involucra múltiples subvalores o cuando el estado depende de una lógica de negocio más avanzada.
+
+Sintaxis
+
+```JavaScript
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+- **state**: El estado actual.
+
+- **dispatch**: Una función que disparas para enviar una acción al reducer (ej. dispatch({ type: 'incrementar' })).
+
+- **reducer**: Una función que recibe el estado actual y la acción, y devuelve el nuevo estado.
+
+- **initialState**: El valor inicial del estado.
+
+En este ejemplo, usamos un contador para mostrar cómo el dispatch envía acciones de manera amigable y organizada, permitiendo que el estado se actualice de forma predecible en el inspector.
+
+```JavaScript
+import React, { useReducer } from 'react';
+
+// 1. Definimos la lógica de cómo cambia el estado
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'incrementar':
+      return { contador: state.contador + 1 };
+    case 'decrementar':
+      return { contador: state.contador - 1 };
+    default:
+      return state;
+  }
+};
+
+function ContadorPro() {
+  // 2. Inicializamos el reducer
+  const [state, dispatch] = useReducer(reducer, { contador: 0 });
+
+  return (
+    <div>
+      <p>Contador: {state.contador}</p>
+      {/* 3. Enviamos acciones de forma amigable */}
+      <button onClick={() => dispatch({ type: 'incrementar' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrementar' })}>-</button>
+    </div>
+  );
+}
+```
+
+---
+
+## Fragment
 
 El **React Fragment** (o simplemente **Fragment**) es una característica de React que permite **agrupar una lista de elementos hijos sin introducir nodos adicionales al DOM (Document Object Model)**.
 
 ---
 
-#### Propósito
+### Propósito
 
 El principal propósito del Fragment es actuar como un elemento contenedor invisible.
 
@@ -332,33 +841,6 @@ En React, al igual que en el DOM estándar de JavaScript, puedes acceder al even
 
 event.target en React te proporciona el elemento que desencadenó el evento y se puede utilizar de manera
 similar a como lo harías en el DOM estándar de JavaScript.
-
-### useRef
-
-useRef es un hook de React que se utiliza para crear y mantener una referencia mutable que persiste a lo largo
-del ciclo de vida del componente.
-
-A diferencia de las variables de estado (useState), los cambios en el objeto ref no provocan una nueva
-renderización del componente. useRef es comúnmente utilizado para acceder y manipular el DOM directamente, o
-para almacenar valores que no provocan una renderización cuando cambian.
-
-### forwardRef
-
-forwardRef es una función en React que te permite pasar un ref a un componente hijo directamente al componente
-hijo, sin tener que pasar por el componente intermedio.
-
-En situaciones normales, cuando tienes un componente intermedio que envuelve otro componente y quieres pasar
-un ref al componente interno, puedes encontrarte con problemas. forwardRef soluciona este problema
-permitiéndote pasar el ref directamente al componente hijo.
-
-forwardRef es una función en React que te permite pasar un ref a un componente hijo directamente al componente hijo, sin tener que pasar por el componente intermedio.
-
-### useImperativeHandle
-
-useImperativeHandle es un hook de React que te permite personalizar los valores que son expuestos cuando un
-componente padre accede al ref de un componente hijo.
-
-Este hook es útil cuando necesitas exponer métodos o propiedades específicas de un componente hijo al componente padre, pero deseas ocultar otras partes de su interfaz pública.
 
 ### Nota sobre React.FC
 
