@@ -8,8 +8,8 @@ Esta sección lista los cursos, bootcamps o recursos principales que estoy utili
 
 | Recurso / Curso                                | Estado   | Progreso | Certificado |
 | :--------------------------------------------- | :------- | :------- | :---------- |
-| **Bootcamp de React Premium** Codigo Facilito  | En curso | 29%      | Pendiente   |
-| **Curso profesional de React** Codigo Facilito | En curso | 26%      | Pendiente   |
+| **Bootcamp de React Premium** Codigo Facilito  | En curso | 66%      | Pendiente   |
+| **Curso profesional de React** Codigo Facilito | En curso | 67%      | Pendiente   |
 
 ## Lenguajes y Herramientas usadas
 
