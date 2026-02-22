@@ -4,6 +4,7 @@ import eventsJSON from "../../data/events.json";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
+import useEventsResults from "../../state/events-results";
 import styles from "./Detail.module.css";
 
 type EventsData = typeof eventsJSON;
@@ -15,6 +16,7 @@ const Detail = () => {
   const [eventData, setEventData] = useState<SingleEvent>();
   const [error, setError] = useState<string | unknown | null>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { data } = useEventsResults();
 
   useEffect(() => {
     const fetchEventData = async () => {
