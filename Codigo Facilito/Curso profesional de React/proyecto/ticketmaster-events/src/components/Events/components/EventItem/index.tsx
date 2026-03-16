@@ -1,7 +1,11 @@
 //para importar modulo se usa la sigueinte sintaxis
 import styles from "./EventItem.module.css";
-import React from "react";
 import type { Event } from "../../../../utils/EventInterface";
+
+// importamos imagene para usarla en el componente
+
+import HearthFilled from "../../../../assets/hearth-filled.png";
+import HearthUnfilled from "../../../../assets/hearth-unfilled.png";
 
 // 1. Definición de la Interfaz de Props Única
 interface EventItemProps {
@@ -23,7 +27,13 @@ const EventItem: React.FC<EventItemProps> = ({ event, onEventClick }) => {
   return (
     // Se adjunta la función 'onEventClick'
     <div className={styles.eventItemContainer}>
-      <img src={event.image} alt={event.name} width={200} height={200} />
+      {/* se agrega un div para mostrar el icono de favorito */}
+      <div className={styles.imageContainer}>
+        <img src={HearthFilled} alt="Hearth Button" className={styles.heartImage}/>
+        <img src={event.image} alt={event.name} width={200} height={200} />
+
+      </div>
+      
       <div className={styles.eventInfoContainer}>
         <h4 className={styles.eventName}>{event.name}</h4>
         <p className={styles.eventInfo}>{event.info}</p>
