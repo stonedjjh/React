@@ -7,6 +7,10 @@ import type { Event } from "../../../../utils/EventInterface";
 import HearthFilled from "../../../../assets/hearth-filled.png";
 import HearthUnfilled from "../../../../assets/hearth-unfilled.png";
 
+//Importamos el Custom Hook para manejar favoritos
+
+import useLikeEvents from "../../../../hooks/useLikeEvents";
+
 // 1. Definición de la Interfaz de Props Única
 interface EventItemProps {
   event: Event;
@@ -17,6 +21,9 @@ interface EventItemProps {
 // 2. Definición del Componente usando React.FC<T> (Recomendado)
 //    y desestructurando todas las props del ÚNICO argumento
 const EventItem: React.FC<EventItemProps> = ({ event, onEventClick }) => {
+  // contante para manejar el estado del evento favorito usando el custom hook
+  const {isEventLiked, toggleEventLike } = useLikeEvents(event.id);
+
   const handleSeeMoreClick = (
     evt: React.MouseEvent<HTMLButtonElement>,
   ): void => {
@@ -24,12 +31,17 @@ const EventItem: React.FC<EventItemProps> = ({ event, onEventClick }) => {
     onEventClick(event.id);
   };
 
+  const handlerHearthClick = (): void => {
+    toggleEventLike();
+  };
+
   return (
     // Se adjunta la función 'onEventClick'
     <div className={styles.eventItemContainer}>
       {/* se agrega un div para mostrar el icono de favorito */}
       <div className={styles.imageContainer}>
-        <img src={HearthFilled} alt="Hearth Button" className={styles.heartImage}/>
+        {/* se usa un ternario para mostrar el icono de favorito */}
+        <img src={isEventLiked ? HearthFilled : HearthUnfilled} alt="Hearth Button" className={styles.heartImage} onClick={handlerHearthClick}/>
         <img src={event.image} alt={event.name} width={200} height={200} />
 
       </div>
