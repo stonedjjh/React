@@ -1,5 +1,7 @@
 //Se importa useState para controlar estados en este caso del Input
 import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+//Se importa Link para navegar a otras rutas
+import { Link } from "react-router";
 
 //se define una interface para las props
 interface NavbarProps {
@@ -92,6 +94,14 @@ const Navbar = forwardRef<dataImperativeHandle, NavbarProps>(
           onKeyDown={handleInputKeyDown}
           value={search}
         />
+        {/* Se agrega un link en el que se puede navegar a la ruta del perfil */}
+        <Link to="/profile" style={{
+          marginLeft: 24,
+          color: '#fff',
+          textDecoration: 'none',
+        }}
+        >Mi perfil </Link>
+        
       </>
     );
   },
