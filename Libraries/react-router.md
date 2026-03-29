@@ -127,3 +127,62 @@ export default Profile;
 - **Navegación**: Proporciona componentes y hooks para manejar la navegación entre
 
 - **Client Side Routing**: Permite la navegación sin recargar la página.
+
+## Error Boundaries en React Router
+
+En las versiones modernas de React Router (v6.4+), el manejo de errores se integra directamente en la definición de las rutas mediante la propiedad `errorElement`. Esto permite capturar errores de red (en loaders), errores de renderizado o errores de lógica dentro de un componente específico de la ruta, manteniendo el resto de la interfaz funcional.
+
+Sintaxis
+
+```JavaScript
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    errorElement: <ErrorPage />, // Este componente captura los errores de esta ruta y sus hijos
+    children: [
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+        loader: dashboardLoader, // Si el loader falla, se muestra ErrorPage
+      },
+    ],
+  },
+]);
+```
+
+- **errorElement:** El componente que React Router renderizará cuando ocurra una excepción durante el renderizado, la carga de datos (loaders) o las acciones (actions).
+
+- **useRouteError:** Un Hook amigable que permite acceder al objeto de error (status, mensaje, data) para mostrar información útil al usuario o al desarrollador.
+
+**Ejemplo:**
+
+Aquí tienes un ejemplo de cómo crear una página de error amigable que detecta si el problema es un 404 o un error interno del servidor.
+
+```JavaScript
+import { useRouteError, isRouteErrorResponse } from "react-router-dom";
+
+function ErrorPage() {
+  const error = useRouteError();
+  console.error(error); // Para depuración amigable en la consola
+
+  return (
+    <div id="error-page">
+      <h1>¡Ups! Algo salió mal</h1>
+      <p>Lo sentimos, ha ocurrido un error inesperado.</p>
+      <p>
+        <i>
+          {isRouteErrorResponse(error)
+            ? `${error.status} ${error.statusText}`
+            : error instanceof Error
+            ? error.message
+            : "Error desconocido"}
+        </i>
+      </p>
+    </div>
+  );
+}
+```
+
+> [!TIP]
+> `useRouteError()` devuelve un tipo `unknown`, por lo que el uso de `isRouteErrorResponse` es fundamental para que TS no se queje.

@@ -9,3 +9,7 @@ Para el 2023 [React Hook Form](./react-hook-form.md) es una de las librerias par
 ## React Router
 
 [React Router](react-router.md) es la librería estándar para manejar la navegación en aplicaciones de una sola página (SPA). Su magia reside en que cambia lo que el usuario ve en pantalla y actualiza la URL del navegador sin recargar la página.
+
+## React Paginate
+
+[React Paginate](react-paginate.md) es una librería que facilita la implementación de la paginación en aplicaciones React. Proporciona componentes personalizables para navegar entre páginas de datos, mejorando la experiencia del usuario al manejar grandes conjuntos de información.

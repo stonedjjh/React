@@ -22,6 +22,10 @@
 
 - **renderOnZeroPageCount**: Controla si se debe renderizar el componente cuando el conteo de páginas es cero.
 
+- **forcePage**: Índice de la página que se debe mostrar como seleccionada. Útil para controlar la paginación desde un componente padre.
+
+- **containerClassName**: Clase CSS para el contenedor de la paginación.
+
 ```javascript
 <ReactPaginate
   breakLabel="..."
@@ -30,6 +34,6 @@
   pageRangeDisplayed={5}
   pageCount={pageCount}
   previousLabel="< previous"
-  renderOnZeroPageCount={null}
+  renderOnZeroPageCount={true}
 />
 ```
