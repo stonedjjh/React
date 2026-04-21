@@ -40,14 +40,22 @@
 
 ## Gist
 
-```react
-import React, { useState, useEffect } from 'react';
+```tsx
+import  { useState, useEffect } from 'react';
 import ReactPaginateModule from "react-paginate";
-import styles from './Pagination.module.css'; // Usando CSS Modules
+import styles from './pagination.module.css'; // Usando CSS Modules
 
- const ReactPaginate = (ReactPaginateModule as any).default || ReactPaginateModule;
+interface User {
+  id: number;
+  nombre: string;
+  apellido: string;
+  edad: number;
+  sexo: string;
+}
 
-const users = [
+// Datos ficticios
+
+const users: User[]= [
   { id: 1, nombre: "Daniel", apellido: "López", edad: 30, sexo: "M" },
   { id: 2, nombre: "Luna", apellido: "Contrera", edad: 6, sexo: "F" },
   { id: 3, nombre: "Andrés", apellido: "Castro", edad: 25, sexo: "M" },
@@ -76,9 +84,13 @@ const users = [
 ];
 
 const UserList = ({ itemsPerPage = 5 }) => {
-  const [currentItems, setCurrentItems] = useState([]);
+  const [currentItems, setCurrentItems] = useState<User[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
+  const ReactPaginate = (ReactPaginateModule as any).default || ReactPaginateModule;
+
+
+  
 
   useEffect(() => {
     // Simulamos la consulta: obtenemos el final del rango
@@ -90,7 +102,7 @@ const UserList = ({ itemsPerPage = 5 }) => {
   }, [itemOffset, itemsPerPage]);
 
   // Función que recibe el evento de react-paginate
-  const handlePageChange = (event) => {
+  const handlePageClick = (event: { selected: number }) => {
     const newOffset = (event.selected * itemsPerPage) % users.length;
     setItemOffset(newOffset);
   };
@@ -101,22 +113,21 @@ const UserList = ({ itemsPerPage = 5 }) => {
       <ul className={styles.userList}>
         {currentItems.map((user) => (
           <li key={user.id} className={styles.userItem}>
-            {user.nombre} {user.apellido} - {user.edad} años ({user.sexo})
+            {`${user.nombre} ${user.apellido} - ${user.edad} años (${user.sexo})`}
           </li>
         ))}
       </ul>
 
       {/* Implementación del Paginate */}
-      <ReactPaginate
+       <ReactPaginate
         breakLabel="..."
         nextLabel="Siguiente >"
-        onPageChange={handlePageChange}
+        onPageChange={handlePageClick}
         pageRangeDisplayed={3}
         marginPagesDisplayed={2}
         pageCount={pageCount}
-        previousLabel="< Anterior"
+        previousLabel="< Anterior"        
         renderOnZeroPageCount={null}
-        // Clases para CSS Modules
         containerClassName={styles.pagination}
         pageClassName={styles.pageItem}
         pageLinkClassName={styles.pageLink}
