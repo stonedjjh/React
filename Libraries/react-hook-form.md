@@ -29,15 +29,41 @@ En este ejemplo se usa el operador de propagación(Operador Spread) con la funci
 
 - **register**: Es la función que vincula un input al estado del formulario. Al aplicarla (usando el operador spread ...register('nombre')), React Hook Form registra el elemento y le asigna automáticamente los manejadores de eventos necesarios (onChange, onBlur) y la referencia para la validación.
 
-**Ejemplo:**
-
 ```JavaScript
-<input name="nombre" ttype="text" {...register(nombre, {required:true})}
+<input name="nombre" type="text" {...register(nombre, {required:true})}
 ```
 
 - **watch**: Este método permite observar el valor de uno o varios campos en tiempo real. Es muy útil para mostrar vistas previas o condicionar el renderizado de otros elementos según lo que el usuario escriba, comportándose de manera amigable al no re-renderizar todo el formulario si no es necesario.
 
+```JavaScript
+const watchField = watch("fieldName");
+```
+
 - **handleSubmit (onHandlerSubmit)**: Es el mediador que procesa el formulario. Recibe tu función personalizada (la que tú llamas habitualmente onHandlerSubmit) y solo la ejecuta si las validaciones han pasado con éxito. Automáticamente previene el comportamiento por defecto del navegador (e.preventDefault()).
+
+```JavaScript
+<form onSubmit={handleSubmit(onHandlerSubmit,onError)}>
+```
+
+- **setValue**: Se utiliza para establecer dinámicamente el valor de un campo registrado. Esto puede ser útil para actualizar valores basados en cierta lógica o en respuesta a eventos que no son directamente cambios en el input.
+
+```JavaScript
+setValue("fieldName", newValue);
+```
+
+- **reset**: Permite resetear los campos del formulario a sus valores por defecto o a nuevos valores proporcionados. Es útil para limpiar el formulario después de un envío o para inicializar el formulario con nuevos valores.
+
+```JavaScript
+reset({fieldName: newValue});
+```
+
+- **control**: Este objeto se utiliza principalmente para control avanzado de componentes, como integrar con componentes de UI de
+terceros que no utilizan `ref` para el registro.
+
+```JavaScript
+<Controller control={control}  name="fieldName" render= {({field}) => <input {...field} />} />
+
+```
 
 ### useForm()
 
@@ -108,6 +134,10 @@ const SearchEventsForm = () => {
 };
 ```
 
+### useFielfArrary
+
+Es un hook que se utiliza para trabajar con arrays de campos. Esto es especialmente útil cuando tienes que manejar formularios dinámicos donde el número de campos puede cambiar, como una lista de habilidades o un formulario con partes que el usuario puede agregar o quitar.
+
 ### formState: { errors }
 
 `formState` es un objeto que contiene información sobre el estado global del formulario. Una de sus propiedades más importantes es `errors`, un objeto que almacena los errores de validación de cada campo registrado. React Hook Form actualiza este objeto de forma amigable, permitiendo mostrar mensajes de error específicos sin necesidad de gestionar estados de error manuales.
@@ -122,7 +152,7 @@ const {
 } = useForm<FormInputs>();
 ```
 
-**Propiedades del objeto errors**
+**Propiedades del objeto errors:**
 
 - **type:** Indica el tipo de validación que falló (ej. required, minLength, pattern).
 
@@ -181,3 +211,6 @@ const SearchEventsForm = () => {
 - **`maxLength`**
 - **`pattern`**
 - **`validate`**
+
+## GIST
+
