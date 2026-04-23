@@ -214,3 +214,133 @@ const SearchEventsForm = () => {
 
 ## GIST
 
+En este ejemplo, utilizaremos Yup para validar las entradas, lo que nos permite obtener un código más legible. Sin embargo, aplicaremos el patrón Adapter para asegurar que, si en un futuro decidimos cambiar la librería de validación, no sea necesario modificar toda la base del código (desacoplamiento).
+
+```tsx
+// src/adapters/validator.interface.ts
+
+export interface ValidationResult {
+  isValid: boolean;
+  errors: Record<string, string>; // Un objeto donde la clave es el campo y el valor es el mensaje
+}
+
+// Definimos qué debe hacer cualquier adaptador que creemos
+export type ValidatorAdapter<T> = (data: T) => ValidationResult;
+```
+
+```tsx
+// src/adapters/yup-adapter.ts
+// Este se encargará de transformar (mapear) los errores complejos de Yup al formato simple de nuestra interfaz ValidationResult
+import { AnyObjectSchema, ValidationError } from "yup";
+import { ValidationResult } from "./validator.interface";
+
+export const yupAdapter = (schema: AnyObjectSchema) => {
+  return (data: any): ValidationResult => {
+    try {
+      // Intentamos validar de forma síncrona
+      schema.validateSync(data, { abortEarly: false });
+      return { isValid: true, errors: {} };
+    } catch (error) {
+      const e = error as ValidationError;
+      const errors: Record<string, string> = {};
+
+      // Mapeamos los errores de Yup a nuestro formato estándar
+      e.inner.forEach((err) => {
+        if (err.path) {
+          errors[err.path] = err.message;
+        }
+      });
+
+      return { isValid: false, errors };
+    }
+  };
+};
+```
+
+```tsx
+// src/schemas/user-schema.ts
+// Se crea el esquema de validación usando la librería de `yup`
+import * as yup from "yup";
+
+export const userSchema = yup.object({
+  username: yup
+    .string()
+    .required("El nombre de usuario es obligatorio")
+    .min(3, "Mínimo 3 caracteres"),
+  email: yup
+    .string()
+    .required("El correo es obligatorio")
+    .email("Formato de correo inválido"),
+  password: yup
+    .string()
+    .required("La contraseña es obligatoria")
+    .min(6, "Mínimo 6 caracteres"),
+});
+```
+
+```tsx
+//Ahora si 
+import { useForm } from "react-hook-form";
+import { ValidatorAdapter } from "./adapters/validator.interface";
+
+// Definimos los campos que espera este formulario
+interface UserFormData {
+  username?: string;
+  email?: string;
+  password?: string;
+}
+
+interface Props {
+  // Aquí inyectamos el adaptador que creamos antes
+  validator: ValidatorAdapter<UserFormData>;
+}
+
+export function Form({ validator }: Props) {
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<UserFormData>();
+
+  const onSubmit = (data: UserFormData) => {
+    // 1. Usamos el adaptador (Desacoplado de Yup)
+    const { isValid, errors: validationErrors } = validator(data);
+
+    if (!isValid) {
+      // 2. Mapeamos los errores del contrato al estado de RHF
+      Object.entries(validationErrors).forEach(([field, message]) => {
+        setError(field as keyof UserFormData, { type: "manual", message });
+      });
+      return;
+    }
+
+    // 3. Si es válido, procedemos con la lógica de negocio
+    console.log("Formulario válido, enviando datos:", data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div>
+        <label htmlFor="username">Nombre de Usuario</label>
+        <input id="username" {...register("username")} />
+        <p style={{ color: "red" }}>{errors.username?.message}</p>
+      </div>
+
+      <div>
+        <label htmlFor="email">Correo Electrónico</label>
+        <input id="email" type="email" {...register("email")} />
+        <p style={{ color: "red" }}>{errors.email?.message}</p>
+      </div>
+
+      <div>
+        <label htmlFor="password">Contraseña</label>
+        <input id="password" type="password" {...register("password")} />
+        <p style={{ color: "red" }}>{errors.password?.message}</p>
+      </div>
+
+      <button type="submit">Registrar</button>
+    </form>
+  );
+}
+```
