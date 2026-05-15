@@ -92,7 +92,7 @@ export default function Header() {
                 <div className="hidden sm:flex">
                   <Link
                     className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-indigo-600 dark:bg-gray-800 dark:text-indigo-400 transition hover:text-indigo-700 dark:hover:text-indigo-300"
-                    to="/register"
+                    to="/sign-up"
                   >
                     Register
                   </Link>
