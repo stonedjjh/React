@@ -1,8 +1,18 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router";
 
+import { useAuthStore } from "~/store/auth";
+
+
+
 export default function Header() {
+  const {user, signOut, isLoading} = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    
+  };
 
   return (
     <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 dark:border-gray-800">
@@ -81,23 +91,36 @@ export default function Header() {
             </nav>
 
             <div className="flex items-center gap-4">
-              <div className="sm:flex sm:gap-4">
-                <Link
-                  className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 hover:shadow-indigo-200 dark:hover:shadow-none"
-                  to="/login"
-                >
-                  Login
-                </Link>
-
-                <div className="hidden sm:flex">
-                  <Link
-                    className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-indigo-600 dark:bg-gray-800 dark:text-indigo-400 transition hover:text-indigo-700 dark:hover:text-indigo-300"
-                    to="/sign-up"
-                  >
-                    Register
-                  </Link>
+               {!!user && (
+                <div className="sm:flex sm:gap-4 items-center">
+                  <p className="text-gray-500 dark:text-gray-400">{user?.user_metadata?.full_name}</p>
+                  <button                    
+                    className="cursor-pointer text-sm hover:text-indigo-800 bg-indigo-600 px-2 py-2 rounded-sm text-white"
+                    onClick={handleSignOut}
+                  >Cerrar Sesión</button>
                 </div>
-              </div>
+              )}
+              {!user && !isLoading  &&  (                
+                <div className="sm:flex sm:gap-4">
+                  <Link
+                    className="rounded-md bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 hover:shadow-indigo-200 dark:hover:shadow-none"
+                    to="/login"
+                  >
+                    Login
+                  </Link>
+
+                  <div className="hidden sm:flex">
+                    <Link
+                      className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-indigo-600 dark:bg-gray-800 dark:text-indigo-400 transition hover:text-indigo-700 dark:hover:text-indigo-300"
+                      to="/sign-up"
+                    >
+                      Register
+                    </Link>
+                  </div>
+                </div>  
+               )}
+  
+
 
               <div className="block md:hidden">
                 <button

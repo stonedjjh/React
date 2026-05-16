@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod";
-import { supabase } from "~/utils/supabese"
+import { useAuthStore } from "~/store/auth";
 
 const signUpSchema = z.object({
   name: z.string().min(3, "Agrega un nombre valildo"),
@@ -18,12 +18,12 @@ const signUpSchema = z.object({
 type SignUpValues = z.infer<typeof signUpSchema>
 
 const SignUp = () => {
+  const {signUp, isLoading, error} = useAuthStore(); //TODO agregar estas banderas al UX
   const navigate = useNavigate();
   const {
       register, 
-      handleSubmit,
-      setError,
-      formState: {errors}
+      handleSubmit,      
+      formState: {errors, isSubmitting} //TODO agregar los errores debajo de cada input
     } = useForm<SignUpValues>({
       resolver: zodResolver(signUpSchema),
     });
@@ -31,22 +31,22 @@ const SignUp = () => {
   const onSubmit = async (formValue: SignUpValues) => {
     try {
       console.log(formValue);
-      const {data, error} = await supabase.auth.signUp({
+
+      const {error } = await signUp({
         email: formValue.email,
         password: formValue.password,     
-        options: {
-          data: {
-            full_name : formValue.name,
-          }
-        }
-      })
-      console.log(data,error)
-      if(!error && !!data)
+        fullName : formValue.name,          
+      });
+     
+      console.log(error)
+      if(!error)
       {
         navigate('/');
+      } else{
+        alert(error)
       }
     } catch (error) {
-      
+      alert(error)
     }
   };
   

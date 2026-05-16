@@ -1,10 +1,10 @@
 // Archivo agregado Asesoría 5
-import React from 'react'
 import { Link,useNavigate } from 'react-router';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod";
-import { supabase } from "~/utils/supabese"
+import { useAuthStore } from '~/store/auth';
+
 
 const loginSchema = z.object({
   email: z.email("Por favor ingresa un correo electrónico valido"),
@@ -15,30 +15,36 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 const Login = () => {
   const navigate = useNavigate();  
+  const { isLoading, error, signIn} = useAuthStore() //TODO las bandera de isLoading y error para el ux
   const {
     register, 
     handleSubmit,
     setError,
-    formState: {errors, isSubmitting}
+    formState: {errors, isSubmitting}, //TODO, agregar errores debajo de cada 
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = async (formValue: LoginFormValues) => {
     try {
-          console.log(formValue);
-          const {data, error} = await supabase.auth.signInWithPassword({
+          //console.log(formValue);
+          const {error} = await signIn({
             email: formValue.email,
-            password: formValue.password,                 
-          })
-          console.log(data,error)
+            password: formValue.password,
+          });          
           
-          if(!error && data.user.id)
+          if(!error)
           {            
             navigate('/');
           }
+          else{            
+            setError("email", {
+              type: "manual",
+              message: error,
+            })
+          }
         } catch (error) {
-          
+          console.log(error)
         }
   };
 
