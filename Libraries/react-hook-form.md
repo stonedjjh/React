@@ -231,8 +231,8 @@ export type ValidatorAdapter<T> = (data: T) => ValidationResult;
 ```tsx
 // src/adapters/yup-adapter.ts
 // Este se encargará de transformar (mapear) los errores complejos de Yup al formato simple de nuestra interfaz ValidationResult
-import { AnyObjectSchema, ValidationError } from "yup";
-import { ValidationResult } from "./validator.interface";
+import { type AnyObjectSchema, ValidationError } from "yup";
+import type { ValidationResult } from "./validator.interface";
 
 export const yupAdapter = (schema: AnyObjectSchema) => {
   return (data: any): ValidationResult => {
@@ -279,9 +279,8 @@ export const userSchema = yup.object({
 ```
 
 ```tsx
-//Ahora si 
 import { useForm } from "react-hook-form";
-import { ValidatorAdapter } from "./adapters/validator.interface";
+import type  { ValidatorAdapter } from "./adapters/validator.interface";
 
 // Definimos los campos que espera este formulario
 interface UserFormData {
