@@ -8,8 +8,10 @@ Esta sección lista los cursos, bootcamps o recursos principales que estoy utili
 
 | Recurso / Curso                                | Estado   | Progreso | Certificado |
 | :--------------------------------------------- | :------- | :------- | :---------- |
-| **Bootcamp de React Premium** Codigo Facilito  | En curso | 66%      | Pendiente   |
-| **Curso profesional de React** Codigo Facilito | En curso | 67%      | Pendiente   |
+| [**Bootcamp de React Premium** Codigo Facilito](./Codigo%20Facilito/Bootcamp%20premium%20de%20React)  | En curso | 80%      | Pendiente   |
+| [**Curso profesional de React** Codigo Facilito](./Codigo%20Facilito/Curso%20profesional%20de%20React) | En curso | 74%      | Pendiente   |
+| [**Developing Front-End Apps with React** IBM](./IBM/Desarrollo%20de%20aplicaciones%20frontales%20con%20React) | En curso | 76%      | Pendiente   |
+
 
 ## Lenguajes y Herramientas usadas
 
