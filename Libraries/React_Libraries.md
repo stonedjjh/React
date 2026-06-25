@@ -9,6 +9,7 @@ En este archivo se irán comentando las librerías más usadas por la comunidad,
 - [React Paginate](#react-paginate)
 - [React Router](#react-router)
 - [Redux](#redux)
+- [Redux Toolkit](#redux-toolkit)
 - [Why Did You Render](#why-did-you-render)
 - [Zustand](#zustand)
 
@@ -33,6 +34,10 @@ Para el 2023 [React Hook Form](./react-hook-form.md) es una de las librerías pa
 ## Redux
 
 [Redux](redux.md) es una biblioteca para la gestión de estado global predecible. Permite centralizar el estado y estructurar la lógica de cambios bajo un flujo unidireccional y funciones puras (reducers).
+
+## Redux Toolkit
+
+[Redux Toolkit](redux-toolkit.md) es el conjunto de herramientas oficial y recomendado para escribir lógica de Redux. Simplifica enormemente la gestión del estado al reducir el boilerplate, integrar Immer para inmutabilidad automática y proveer soluciones integradas para tareas comunes como la asincronía.
 
 ## Why Did You Render
 
