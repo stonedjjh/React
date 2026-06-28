@@ -11,7 +11,11 @@ Esta sección lista los cursos, bootcamps o recursos principales que estoy utili
 | [**Bootcamp de React Premium** Codigo Facilito](./Codigo%20Facilito/Bootcamp%20premium%20de%20React)  | En curso | 80%      | Pendiente   |
 | [**Curso profesional de React** Codigo Facilito](./Codigo%20Facilito/Curso%20profesional%20de%20React) | En curso | 74%      | Pendiente   |
 | [**Developing Front-End Apps with React** IBM](./IBM/Desarrollo%20de%20aplicaciones%20frontales%20con%20React) | En curso | 76%      | Pendiente   |
+| [**React Developer (Mid)** Certificates.dev](./CertificatesDev/React-Mid) | En curso | 0% | Pendiente |
 
+## Certificaciones
+
+- 🏆 [![Junior React Developer](https://img.shields.io/badge/Certificates.dev-Junior%20React%20Developer-61dafb?style=flat-square&logo=react&logoColor=black)](https://certificates.dev/react/certificates/a2154a28-5466-442f-a1d2-6f539cfcd9cd)
 
 ## Lenguajes y Herramientas usadas
 
