@@ -1,0 +1,141 @@
+.moviecard_container {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  max-width: 350px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid #f0f0f0;
+}
+
+.moviecard_container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.moviecard_container img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.moviecard__title {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.moviecard__description {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #555555;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.moviecard__rating {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888888;
+  margin: 8px 0 0 0;
+}
+
+.moviecard__genre {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888888;
+  margin: 8px 0 0 0;
+}
+
+.moviecard__intheaters {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: #FF0000;
+  color: #FFFFFF;
+  border: 1px solid #FF0000;
+  border-radius: 15px;
+  margin: 8px 0 0 0;
+  text-align: center;
+  width: 50%;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.moviecard_container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.moviecard_container li {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  text-transform: capitalize;
+}
+
+.star_yellow {
+  background-color: yellow;
+}
+
+.star_gray {
+  background-color: gray;
+}
+
+.image_size {
+  width: 200px;
+  height: 300px;
+}
+
+.no_image_text {
+  font-family: 'Inter', sans-serif;
+  font-weight: Bold;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  background-color: black;
+  color: white;
+  width: 300px;
+  height: 200px;
+}
+
+.image_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.star_icon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px
+}
