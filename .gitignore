@@ -1,9 +1,9 @@
 # Carpetas temporales de Google Drive (descargas y subidas)
 .tmp.drivedownload/
 .tmp.driveupload/
-node_modules/date-fns/
+.env/*
 Codigo Facilito/Curso profesional de React/proyecto/ticketmaster-events/.env
 Codigo Facilito/Bootcamp premium de React/Asesorias/
 Codigo Facilito/Bootcamp premium de React/Clases/
 Codigo Facilito/Bootcamp premium de React/Proyecto/cf-custom-hooks-main/
-
+node_modules/
