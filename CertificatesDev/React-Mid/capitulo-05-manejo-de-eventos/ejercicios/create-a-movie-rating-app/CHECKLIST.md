@@ -1,0 +1,11 @@
+- The form includes a text input for name
+- The form includes a textarea for description
+- The form includes a text input for image URL
+- The form includes a dropdown for genres
+- Multiple genres can be selected from the dropdown
+- The form includes a checkbox for inTheaters
+- When the form is submitted, Form data is console logged in a useful format from `App.jsx`
+- When a cancel button is clicked, "cancel" is logged from `App.jsx`
+- Default values are correctly displayed when editing an existing movie
+- The form submit button displays "Create" when adding a new movie
+- The form submit button displays "Save" when editing an existing movie
